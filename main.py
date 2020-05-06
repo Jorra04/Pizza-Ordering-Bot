@@ -14,6 +14,11 @@ def run():
     elif clicked.get() == "Hawaiian":
         print("Hawaiian mate")
 
+
+def openPastOrder():
+    pass
+def saveCurrOrder():
+    pass
 root = Tk()
 root.title("Order a pizza")
 root.geometry("700x500")
@@ -29,6 +34,17 @@ credit = Label(root, text="Credit Card Number")
 credit_entry = Entry(root)
 ccv = Label(root,text="CCV")
 ccv_entry = Entry(root)
+######################################### creating menu ##########################################
+myMenu = Menu(root)
+root.config(menu=myMenu)
+
+file_menu = Menu(myMenu)
+myMenu.add_cascade(label="File",menu=file_menu)
+file_menu.add_command(label="Open...", command=openPastOrder)
+file_menu.add_command(label="Save...", command=saveCurrOrder)
+file_menu.add_separator()
+file_menu.add_command(label="Quit...",command=root.quit)
+################################ done ###################################################
 
 clicked = StringVar()
 clicked.set("Pepperoni")
