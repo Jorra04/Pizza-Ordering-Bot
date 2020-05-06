@@ -55,14 +55,4 @@ drop.grid(row = 6, column= 1)
 accept.grid(row=6,column=5)
 
 
-
-
-
-
 root.mainloop()
-
-    
-
-
-
-
