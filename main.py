@@ -1,20 +1,34 @@
 from tkinter import *
+from selenium import webdriver
+from time import sleep
 
 def run():
     if clicked.get() == "Cheese":
-        print("cheese mate")
+        # print("cheese mate")
+        order(1)
     elif clicked.get() == "Pepperoni":
-        print("Pep mate")
+        # print("Pep mate")
+        order(2)
 
     elif clicked.get() == "Meat Lovers":
-        print("Meat Lovers mate")
+        # print("Meat Lovers mate")
+        order(3)
 
     elif clicked.get() == "Canadian":
-        print("Canadian mate")
+        # print("Canadian mate")
+        order(4)
     elif clicked.get() == "Hawaiian":
-        print("Hawaiian mate")
+        # print("Hawaiian mate")
+        order(5)
 
-
+def order(style):
+    chromePath = r"C:\Users\jorra\Downloads\chromedriver_win32\chromedriver.exe"
+    driver = webdriver.Chrome(chromePath)
+    driver.get("https://www.dominos.ca/en/")
+    sleep(3)
+    driver.find_element_by_xpath("/html/body/div[2]/div[3]/main/section[1]/div/div[2]/a[1]").click()
+    sleep(2)
+    driver.find_element_by_xpath("//input[[@name=\"Street\"]").send_keys(address_entry.get())
 def openPastOrder():
     pass
 def saveCurrOrder():
@@ -34,6 +48,11 @@ credit = Label(root, text="Credit Card Number")
 credit_entry = Entry(root)
 ccv = Label(root,text="CCV")
 ccv_entry = Entry(root)
+city = Label(root,text="City")
+city_entry = Entry(root)
+province = Label(root,text="Province")
+province_entry = Entry(root)
+
 ######################################### creating menu ##########################################
 myMenu = Menu(root)
 root.config(menu=myMenu)
@@ -62,13 +81,21 @@ phone_number_entry.grid(row=2,column=1)
 address.grid(row=2, column=4,padx=10, pady=10)
 address_entry.grid(row=2,column=5)
 
-credit.grid(row = 4, column=0,padx=10, pady=10)
-credit_entry.grid(row=4,column=1)
 
-ccv.grid(row=4, column=4,padx=10, pady=10)
-ccv_entry.grid(row=4, column=5)
-drop.grid(row = 6, column= 1)
-accept.grid(row=6,column=5)
+
+city.grid(row = 4, column=0,padx=10, pady=10)
+city_entry.grid(row=4,column=1)
+
+province.grid(row = 4, column=4,padx=10, pady=10)
+province_entry.grid(row = 4, column=5)
+
+credit.grid(row = 6, column=0,padx=10, pady=10)
+credit_entry.grid(row=6,column=1)
+
+ccv.grid(row=6, column=4,padx=10, pady=10)
+ccv_entry.grid(row=6, column=5)
+drop.grid(row = 8, column= 1)
+accept.grid(row=8,column=5)
 
 
 root.mainloop()
