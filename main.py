@@ -1,8 +1,19 @@
 from tkinter import *
 
 def run():
-    text = first_name_entry.get()
-    print(text)
+    if clicked.get() == "Cheese":
+        print("cheese mate")
+    elif clicked.get() == "Pepperoni":
+        print("Pep mate")
+
+    elif clicked.get() == "Meat Lovers":
+        print("Meat Lovers mate")
+
+    elif clicked.get() == "Canadian":
+        print("Canadian mate")
+    elif clicked.get() == "Hawaiian":
+        print("Hawaiian mate")
+
 root = Tk()
 root.title("Order a pizza")
 root.geometry("700x500")
