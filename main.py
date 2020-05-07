@@ -3,7 +3,6 @@ from selenium import webdriver
 from time import sleep
 from selenium.webdriver.support.ui import Select
 from tkinter.filedialog import askopenfilename
-import pandas
 import xlrd
 
 def run():
@@ -58,9 +57,21 @@ def order(style):
         driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[8]/div/a[1]").click()
 def openPastOrder():
     # filename = askopenfilename()
-    data_sheet = pandas.read_excel('Order.xlsx')
-    first_name_var.set("Jorrasss")
-    
+    # cols = [0,1,2,3,4,5,6,7]
+    fileName = askopenfilename()
+    workbook = xlrd.open_workbook(fileName)
+    worksheet = workbook.sheet_by_name('order')
+    first_name_var.set(worksheet.cell(1,0).value)
+    last_name_var.set(worksheet.cell(1,1).value)
+    phone_number_var.set(worksheet.cell(1,2).value)
+    address_var.set(worksheet.cell(1,3).value)
+    city_var.set(worksheet.cell(1,4).value)
+    postal_var.set(worksheet.cell(1,5).value)
+    prov.set(worksheet.cell(1,6).value)
+    credit_var.set(worksheet.cell(1,7).value)
+    ccv_var.set(worksheet.cell(1,8).value)
+    clicked.set(worksheet.cell(1,9).value)
+
 def saveCurrOrder():
     pass
 def endProgram():
@@ -71,26 +82,44 @@ root.geometry("700x500")
 first_name = Label(root, text="First Name")
 first_name_var = StringVar()
 first_name_entry = Entry(root,textvariable=first_name_var) #first name
+
+last_name_var= StringVar()
 last_name = Label(root,text="Last Name")
-last_name_entry = Entry(root) #last name
+last_name_entry = Entry(root,textvariable=last_name_var) #last name
+
+
+phone_number_var= StringVar()
 phone_number = Label(root, text="Phone #")
-phone_number_entry = Entry(root)
+phone_number_entry = Entry(root,textvariable=phone_number_var)
+
+
 address = Label(root,text="Address")
-address_entry = Entry(root)
+address_var= StringVar()
+address_entry = Entry(root,textvariable=address_var)
 
 city = Label(root,text="City")
-city_entry = Entry(root)
+city_var= StringVar()
+city_entry = Entry(root,textvariable=city_var)
+
+
 postal = Label(root,text="Postal Code")
-postal_entry = Entry(root)
+postal_var= StringVar()
+postal_entry = Entry(root,textvariable=postal_var)
+
+
 prov = StringVar()
 prov.set("ON")
 province = OptionMenu(root,prov, "AL","BC","MB","NB","NL"
 ,"NS","NT","NU","ON","PE","QC","SK","YT")
 
 credit = Label(root, text="Credit Card Number")
-credit_entry = Entry(root)
+credit_var= StringVar()
+credit_entry = Entry(root,textvariable=credit_var)
+
+
 ccv = Label(root,text="CCV")
-ccv_entry = Entry(root)
+ccv_var = StringVar()
+ccv_entry = Entry(root,textvariable=ccv_var)
 
 
 
