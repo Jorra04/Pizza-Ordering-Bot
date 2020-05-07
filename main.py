@@ -2,6 +2,9 @@ from tkinter import *
 from selenium import webdriver
 from time import sleep
 from selenium.webdriver.support.ui import Select
+from tkinter.filedialog import askopenfilename
+import pandas
+import xlrd
 
 def run():
     if clicked.get() == "Cheese":
@@ -54,7 +57,10 @@ def order(style):
     elif style == 5: #hawaiian
         driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[8]/div/a[1]").click()
 def openPastOrder():
-    pass
+    # filename = askopenfilename()
+    data_sheet = pandas.read_excel('Order.xlsx')
+    first_name_var.set("Jorrasss")
+    
 def saveCurrOrder():
     pass
 def endProgram():
@@ -63,7 +69,8 @@ root = Tk()
 root.title("Order a pizza")
 root.geometry("700x500")
 first_name = Label(root, text="First Name")
-first_name_entry = Entry(root) #first name
+first_name_var = StringVar()
+first_name_entry = Entry(root,textvariable=first_name_var) #first name
 last_name = Label(root,text="Last Name")
 last_name_entry = Entry(root) #last name
 phone_number = Label(root, text="Phone #")
