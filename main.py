@@ -2,8 +2,8 @@ from tkinter import *
 from selenium import webdriver
 from time import sleep
 from selenium.webdriver.support.ui import Select
-from tkinter.filedialog import askopenfilename
-import xlrd
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+import xlrd, xlsxwriter
 
 def run():
     if clicked.get() == "Cheese":
@@ -71,9 +71,20 @@ def openPastOrder():
     credit_var.set(worksheet.cell(1,7).value)
     ccv_var.set(worksheet.cell(1,8).value)
     clicked.set(worksheet.cell(1,9).value)
-
+def writeExcel(workSheet, col,val):
+    workSheet.write(col,val)
+    
 def saveCurrOrder():
-    pass
+    fileName = asksaveasfilename(defaultextension='.xlsx')
+    
+    try:
+        workBook = xlsxwriter.Workbook(fileName)
+        workSheet = workBook.add_worksheet()
+        writeExcel(workSheet,'A1','First Name')
+        workBook.close()
+    except:
+        return
+    
 def endProgram():
     pass
 root = Tk()
@@ -101,11 +112,9 @@ city = Label(root,text="City")
 city_var= StringVar()
 city_entry = Entry(root,textvariable=city_var)
 
-
 postal = Label(root,text="Postal Code")
 postal_var= StringVar()
 postal_entry = Entry(root,textvariable=postal_var)
-
 
 prov = StringVar()
 prov.set("ON")
@@ -120,9 +129,6 @@ credit_entry = Entry(root,textvariable=credit_var)
 ccv = Label(root,text="CCV")
 ccv_var = StringVar()
 ccv_entry = Entry(root,textvariable=ccv_var)
-
-
-
 
 ######################################### creating menu ##########################################
 myMenu = Menu(root)
@@ -152,17 +158,13 @@ phone_number_entry.grid(row=2,column=1)
 address.grid(row=2, column=4)
 address_entry.grid(row=2,column=5)
 
-
-
 city.grid(row = 4, column=0)
 city_entry.grid(row=4,column=1)
 
 postal.grid(row = 4, column=4)
 postal_entry.grid(row=4,column=5)
 
-
 province.grid(row = 4, column=7)
-
 
 credit.grid(row = 6, column=0)
 credit_entry.grid(row=6,column=1)
@@ -171,6 +173,5 @@ ccv.grid(row=6, column=4)
 ccv_entry.grid(row=6, column=5)
 drop.grid(row = 8, column= 1)
 accept.grid(row=8,column=5)
-
 
 root.mainloop()
