@@ -71,16 +71,45 @@ def openPastOrder():
     credit_var.set(worksheet.cell(1,7).value)
     ccv_var.set(worksheet.cell(1,8).value)
     clicked.set(worksheet.cell(1,9).value)
-def writeExcel(workSheet, col,val):
-    workSheet.write(col,val)
-    
+def writeExcel(workSheet,workBook,makeBold, col,val):
+    bold = workBook.add_format({'bold':makeBold})
+    workSheet.write(col,val,bold)
+
 def saveCurrOrder():
     fileName = asksaveasfilename(defaultextension='.xlsx')
     
     try:
         workBook = xlsxwriter.Workbook(fileName)
-        workSheet = workBook.add_worksheet()
-        writeExcel(workSheet,'A1','First Name')
+        workSheet = workBook.add_worksheet(name='order')
+        writeExcel(workSheet,workBook, True, 'A1','First Name')
+        writeExcel(workSheet,workBook, False, 'A2',first_name_var.get())
+
+        writeExcel(workSheet,workBook, True, 'B1','Last Name')
+        writeExcel(workSheet,workBook, False, 'B2',last_name_var.get())
+
+        writeExcel(workSheet,workBook, True, 'C1','Phone #')
+        writeExcel(workSheet,workBook, False, 'C2',phone_number_var.get())
+
+        writeExcel(workSheet,workBook, True, 'D1','Address')
+        writeExcel(workSheet,workBook, False, 'D2',address_var.get())
+
+        writeExcel(workSheet,workBook, True, 'E1','City')
+        writeExcel(workSheet,workBook, False, 'E2',city_var.get())
+
+        writeExcel(workSheet,workBook, True, 'F1','Postal Code')
+        writeExcel(workSheet,workBook, False, 'F2',postal_var.get())
+
+        writeExcel(workSheet,workBook, True, 'G1','Province')
+        writeExcel(workSheet,workBook, False, 'G2',prov.get())
+
+        writeExcel(workSheet,workBook, True, 'H1','Credit Card #')
+        writeExcel(workSheet,workBook, False, 'H2',credit_var.get())
+
+        writeExcel(workSheet,workBook, True, 'I1','CCV')
+        writeExcel(workSheet,workBook, False, 'I2',ccv_var.get())
+
+        writeExcel(workSheet,workBook, True, 'J1','Pizza')
+        writeExcel(workSheet,workBook, False, 'J2',clicked.get())
         workBook.close()
     except:
         return
