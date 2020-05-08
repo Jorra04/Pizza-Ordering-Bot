@@ -55,9 +55,41 @@ def order(style):
         driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[5]/div/a[1]").click()
     elif style == 5: #hawaiian
         driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[8]/div/a[1]").click()
+
+    ############### Place order #############################################
+    sleep(5)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/aside/div[2]/a").click()
+    sleep(5)
+    driver.find_element_by_xpath("/html/body/div[24]/section/div/div[2]/div/a").click()
+    sleep(5)
+    Select(driver.find_element_by_name('1|Quantity')).select_by_visible_text(quantity_val.get())
+    sleep(5)
+    driver.find_element_by_xpath("/html/body/div[2]/div[3]/div/div/div/aside/div[3]/a").click()
+    sleep(7)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[2]/input").send_keys(first_name_var.get())
+    sleep(2)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[3]/input").send_keys(last_name_var.get())
+    sleep(2)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[4]/div/bdo/input").send_keys("Jorra04@gmail.com")
+    sleep(2)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[8]/div[1]/bdo/input[1]").send_keys("("+ phone_number_var.get()[0:3]+") "+
+    phone_number_var.get()[3:6] + "-"+ phone_number_var.get()[6:10])
+
+    sleep(3)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/label/input").click()
+    sleep(2)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[2]/input").send_keys(credit_var.get())
+    sleep(2)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[4]/div[2]/input").send_keys(ccv_var.get())
+    sleep(2)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[5]/div[1]/input").send_keys(postal_var.get())
+    sleep(2)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[26]/div/div[1]/div/label/input").click()
+    sleep(4)
+    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[5]/div/div[4]/button").click()
+    print(phone_number_var.get())
+
 def openPastOrder():
-    # filename = askopenfilename()
-    # cols = [0,1,2,3,4,5,6,7]
     fileName = askopenfilename()
     workbook = xlrd.open_workbook(fileName)
     worksheet = workbook.sheet_by_name('order')
@@ -71,6 +103,7 @@ def openPastOrder():
     credit_var.set(worksheet.cell(1,7).value)
     ccv_var.set(worksheet.cell(1,8).value)
     clicked.set(worksheet.cell(1,9).value)
+    quantity_val.set(worksheet.cell(1,10).value)
 def writeExcel(workSheet,workBook,makeBold, col,val):
     bold = workBook.add_format({'bold':makeBold})
     workSheet.write(col,val,bold)
@@ -110,6 +143,10 @@ def saveCurrOrder():
 
         writeExcel(workSheet,workBook, True, 'J1','Pizza')
         writeExcel(workSheet,workBook, False, 'J2',clicked.get())
+
+        writeExcel(workSheet,workBook, True, 'K1','Quantity')
+        writeExcel(workSheet,workBook, False, 'K2',quantity_val.get())
+
         workBook.close()
     except:
         return
@@ -175,7 +212,12 @@ clicked = StringVar()
 clicked.set("Cheese")
 drop = OptionMenu(root,clicked, "Cheese", "Pepperoni", "Meat Lovers", "Canadian", "Hawaiian")
 
-accept = Button(root,text="Click Me!", command=run)
+quantity_val = StringVar()
+quantity_val.set(1)
+quantity = OptionMenu(root,quantity_val, "1","2","3","4","5","6","7","8")
+
+
+accept = Button(root,text="Place Order!", command=run)
 first_name.grid(row=0, column=0 ,padx=10, pady=10)
 last_name.grid(row=0, column=4)
 first_name_entry.grid(row=0,column=1)
@@ -201,6 +243,7 @@ credit_entry.grid(row=6,column=1)
 ccv.grid(row=6, column=4)
 ccv_entry.grid(row=6, column=5)
 drop.grid(row = 8, column= 1)
+quantity.grid(row = 8, column = 3)
 accept.grid(row=8,column=5)
 
 root.mainloop()
