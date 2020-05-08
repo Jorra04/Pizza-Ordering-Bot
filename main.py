@@ -87,7 +87,8 @@ def order(style):
     driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[26]/div/div[1]/div/label/input").click()
     sleep(4)
     driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[5]/div/div[4]/button").click()
-    print(phone_number_var.get())
+    sleep(3)
+    #########here
 
 def openPastOrder():
     fileName = askopenfilename()
@@ -102,8 +103,10 @@ def openPastOrder():
     prov.set(worksheet.cell(1,6).value)
     credit_var.set(worksheet.cell(1,7).value)
     ccv_var.set(worksheet.cell(1,8).value)
-    clicked.set(worksheet.cell(1,9).value)
-    quantity_val.set(worksheet.cell(1,10).value)
+    cc_exp_month_val.set(worksheet.cell(1,9).value)
+    cc_exp_year_val.set(worksheet.cell(1,10).value)
+    clicked.set(worksheet.cell(1,11).value)
+    quantity_val.set(worksheet.cell(1,12).value)
 def writeExcel(workSheet,workBook,makeBold, col,val):
     bold = workBook.add_format({'bold':makeBold})
     workSheet.write(col,val,bold)
@@ -141,11 +144,17 @@ def saveCurrOrder():
         writeExcel(workSheet,workBook, True, 'I1','CCV')
         writeExcel(workSheet,workBook, False, 'I2',ccv_var.get())
 
-        writeExcel(workSheet,workBook, True, 'J1','Pizza')
-        writeExcel(workSheet,workBook, False, 'J2',clicked.get())
+        writeExcel(workSheet,workBook, True, 'J1','Expiry Month')
+        writeExcel(workSheet,workBook, False, 'J2',cc_exp_month_val.get())
 
-        writeExcel(workSheet,workBook, True, 'K1','Quantity')
-        writeExcel(workSheet,workBook, False, 'K2',quantity_val.get())
+        writeExcel(workSheet,workBook, True, 'K1','Expiry Year')
+        writeExcel(workSheet,workBook, False, 'K2',cc_exp_year_val.get())
+
+        writeExcel(workSheet,workBook, True, 'L1','Pizza')
+        writeExcel(workSheet,workBook, False, 'L2',clicked.get())
+
+        writeExcel(workSheet,workBook, True, 'M1','Quantity')
+        writeExcel(workSheet,workBook, False, 'M2',quantity_val.get())
 
         workBook.close()
     except:
@@ -155,7 +164,8 @@ def endProgram():
     pass
 root = Tk()
 root.title("Order a pizza")
-root.geometry("700x500")
+root.geometry("550x250")
+root.resizable(False, False)
 first_name = Label(root, text="First Name")
 first_name_var = StringVar()
 first_name_entry = Entry(root,textvariable=first_name_var) #first name
@@ -195,6 +205,15 @@ credit_entry = Entry(root,textvariable=credit_var)
 ccv = Label(root,text="CCV")
 ccv_var = StringVar()
 ccv_entry = Entry(root,textvariable=ccv_var)
+
+cc_exp_month = Label(root,text="Exp")
+cc_exp_month_val = StringVar()
+cc_exp_month_entry = Entry(root,textvariable=cc_exp_month_val)
+
+cc_exp_year = Label(root,text="Exp")
+cc_exp_year_val = StringVar()
+cc_exp_year_entry = Entry(root,textvariable=cc_exp_year_val)
+
 
 ######################################### creating menu ##########################################
 myMenu = Menu(root)
@@ -242,8 +261,15 @@ credit_entry.grid(row=6,column=1)
 
 ccv.grid(row=6, column=4)
 ccv_entry.grid(row=6, column=5)
-drop.grid(row = 8, column= 1)
-quantity.grid(row = 8, column = 3)
-accept.grid(row=8,column=5)
+
+cc_exp_month.grid(row = 8, column=0)
+cc_exp_month_entry.grid(row = 8, column=1)
+
+cc_exp_year.grid(row = 8, column=4)
+cc_exp_year_entry.grid(row = 8, column=5)
+
+drop.grid(row = 10, column= 1)
+quantity.grid(row = 10, column = 3)
+accept.grid(row=10,column=5)
 
 root.mainloop()
