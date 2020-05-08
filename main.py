@@ -3,6 +3,8 @@ from selenium import webdriver
 from time import sleep
 from selenium.webdriver.support.ui import Select
 from tkinter.filedialog import askopenfilename, asksaveasfilename
+from twilio.rest import Client
+from creds import account_sid, auth_token, cell, twillio_num
 import xlrd, xlsxwriter
 
 def run():
@@ -25,70 +27,85 @@ def run():
         order(5)
 
 def order(style):
-    chromePath = r"C:\Users\jorra\Downloads\chromedriver_win32\chromedriver.exe"
+    chromePath = r"chromedriver.exe"
     driver = webdriver.Chrome(chromePath)
     driver.get("https://www.dominos.ca/en/")
-    sleep(3)
-    driver.find_element_by_xpath("/html/body/div[2]/div[3]/main/section[1]/div/div[2]/a[1]").click()
-    sleep(10)
-    driver.find_element_by_id("Street").send_keys(address_entry.get())
-    sleep(4)
-    driver.find_element_by_id("City").send_keys(city_entry.get())
-    sleep(4)
-    driver.find_element_by_id("Postal_Code").send_keys(postal_entry.get())
-    sleep(4)
-    Select(driver.find_element_by_name('Region')).select_by_visible_text(prov.get())
-    sleep(4)
-    driver.find_element_by_xpath("//button[@type=\"submit\"]").click()
-    sleep(7)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/div[2]/div[7]/a/div[2]/h2").click()
-    sleep(20)
-    if style == 1: #cheese
-        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[16]/div/a[1]").click()
-    elif style == 2:#pep
-        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[11]/div/a[1]").click()
-        # /html/body/div[2]/div[2]/div/div/section/div/div[16]/div/a[1]
-    elif style == 3: #Meat
-        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[9]/div/a[1]").click()
+    client = Client(account_sid, auth_token)
+    try:
+        sleep(3)
+        driver.find_element_by_xpath("/html/body/div[2]/div[3]/main/section[1]/div/div[2]/a[1]").click()
+        sleep(10)
+        driver.find_element_by_id("Street").send_keys(address_entry.get())
+        sleep(4)
+        driver.find_element_by_id("City").send_keys(city_entry.get())
+        sleep(4)
+        driver.find_element_by_id("Postal_Code").send_keys(postal_entry.get())
+        sleep(4)
+        Select(driver.find_element_by_name('Region')).select_by_visible_text(prov.get())
+        sleep(4)
+        driver.find_element_by_xpath("//button[@type=\"submit\"]").click()
+        sleep(7)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/div[2]/div[7]/a/div[2]/h2").click()
+        sleep(20)
+        if style == 1: #cheese
+            driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[16]/div/a[1]").click()
+        elif style == 2:#pep
+            driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[11]/div/a[1]").click()
+            # /html/body/div[2]/div[2]/div/div/section/div/div[16]/div/a[1]
+        elif style == 3: #Meat
+            driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[9]/div/a[1]").click()
+
+        elif style == 4: #canadian
+            driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[5]/div/a[1]").click()
+        elif style == 5: #hawaiian
+            driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[8]/div/a[1]").click()
+
+        ############### Place order #############################################
+        sleep(5)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/aside/div[2]/a").click()
+        sleep(5)
+        driver.find_element_by_xpath("/html/body/div[24]/section/div/div[2]/div/a").click()
+        sleep(5)
+        Select(driver.find_element_by_name('1|Quantity')).select_by_visible_text(quantity_val.get())
+        sleep(5)
+        driver.find_element_by_xpath("/html/body/div[2]/div[3]/div/div/div/aside/div[3]/a").click()
+        sleep(7)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[2]/input").send_keys(first_name_var.get())
+        sleep(2)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[3]/input").send_keys(last_name_var.get())
+        sleep(2)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[4]/div/bdo/input").send_keys("Jorra04@gmail.com")
+        sleep(2)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[8]/div[1]/bdo/input[1]").send_keys("("+ phone_number_var.get()[0:3]+") "+
+        phone_number_var.get()[3:6] + "-"+ phone_number_var.get()[6:10])
+        sleep(3)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/label/input").click()
+        sleep(2)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[2]/input").send_keys(credit_var.get())
+        sleep(2)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[4]/div[2]/input").send_keys(ccv_var.get())
+        sleep(2)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[5]/div[1]/input").send_keys(postal_var.get())
+        sleep(2)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[26]/div/div[1]/div/label/input").click()
+        sleep(3)
+        Select(driver.find_element_by_name('Expiration_Month')).select_by_visible_text(cc_exp_month_val.get())
+        sleep(2)
+        Select(driver.find_element_by_name('Expiration_Year')).select_by_visible_text(cc_exp_year_val.get())
+        sleep(4)
+        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[5]/div/div[4]/button").click()
+        message = 'Your order has been completed. It will arrive within 20-45 minutes from receiving this message. Thank you!'  
+        message = client.messages.create(body=message,
+        from_=twillio_num, to=cell)
+        driver.quit()
+        root.destroy()
+    except:
+        message = 'We incurred an issue while trying to process your request. Please restart the process.'  
+        message = client.messages.create(body=message,
+        from_=twillio_num, to=cell)
+        driver.quit()
+        root.destroy()
         
-    elif style == 4: #canadian
-        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[5]/div/a[1]").click()
-    elif style == 5: #hawaiian
-        driver.find_element_by_xpath("/html/body/div[2]/div[2]/div/div/section/div/div[8]/div/a[1]").click()
-
-    ############### Place order #############################################
-    sleep(5)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/aside/div[2]/a").click()
-    sleep(5)
-    driver.find_element_by_xpath("/html/body/div[24]/section/div/div[2]/div/a").click()
-    sleep(5)
-    Select(driver.find_element_by_name('1|Quantity')).select_by_visible_text(quantity_val.get())
-    sleep(5)
-    driver.find_element_by_xpath("/html/body/div[2]/div[3]/div/div/div/aside/div[3]/a").click()
-    sleep(7)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[2]/input").send_keys(first_name_var.get())
-    sleep(2)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[3]/input").send_keys(last_name_var.get())
-    sleep(2)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[4]/div/bdo/input").send_keys("Jorra04@gmail.com")
-    sleep(2)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[1]/div/div[3]/div[2]/div/div[8]/div[1]/bdo/input[1]").send_keys("("+ phone_number_var.get()[0:3]+") "+
-    phone_number_var.get()[3:6] + "-"+ phone_number_var.get()[6:10])
-
-    sleep(3)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/label/input").click()
-    sleep(2)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[2]/input").send_keys(credit_var.get())
-    sleep(2)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[4]/div[2]/input").send_keys(ccv_var.get())
-    sleep(2)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[5]/div/div/div[5]/div[1]/input").send_keys(postal_var.get())
-    sleep(2)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[4]/div/div[2]/div[2]/div[26]/div/div[1]/div/label/input").click()
-    sleep(4)
-    driver.find_element_by_xpath("/html/body/div[2]/div[2]/div[1]/form/div[5]/div/div[4]/button").click()
-    sleep(3)
-    #########here
 
 def openPastOrder():
     fileName = askopenfilename()
@@ -113,7 +130,6 @@ def writeExcel(workSheet,workBook,makeBold, col,val):
 
 def saveCurrOrder():
     fileName = asksaveasfilename(defaultextension='.xlsx')
-    
     try:
         workBook = xlsxwriter.Workbook(fileName)
         workSheet = workBook.add_worksheet(name='order')
@@ -159,7 +175,7 @@ def saveCurrOrder():
         workBook.close()
     except:
         return
-    
+
 def endProgram():
     pass
 root = Tk()
